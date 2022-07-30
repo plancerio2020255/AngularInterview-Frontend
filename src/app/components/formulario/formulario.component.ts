@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class FormularioComponent implements OnInit {
   public estudianteModelPost: Estudiante;
+  public estudianteModelGet: Estudiante;
 
   constructor(public _estudianteService: EstudianteService) {
     this.estudianteModelPost = new Estudiante(
@@ -19,21 +20,29 @@ export class FormularioComponent implements OnInit {
       '',
       '',
       '',
-      '',
       new Date(),
       '',
       '',
-      new Date(),
       new Date()
     );
   }
 
-  generos: string[] = ['Masculino', 'Femenino'];
+  generos = [{ genero: 'Masculino' }, { genero: 'Femenino' }];
+  GeneroPoesia = [
+    { genero: 'Lirico' },
+    { genero: 'Epico' },
+    { genero: 'Dramatico' },
+  ];
+  Carreras = [
+    { carrera: 'Informatica' },
+    { carrera: 'Electricidad' },
+    { carrera: 'Dibujo' },
+  ];
 
   ngOnInit(): void {}
   postSolicitud() {
     this._estudianteService
-      .agregarSolicitud(this.estudianteModelPost)
+      .agregarSolicitud({ modeloEstudiante: this.estudianteModelPost })
       .subscribe(
         (response) => {
           console.log(response);
@@ -42,27 +51,51 @@ export class FormularioComponent implements OnInit {
             (this.estudianteModelPost.direccion = ''),
             (this.estudianteModelPost.genero = ''),
             (this.estudianteModelPost.telefono = ''),
-            (this.estudianteModelPost.dateofBirth = new Date()),
-            (this.estudianteModelPost.idCarrera = ''),
-            (this.estudianteModelPost.idGeneroP = ''),
-            (this.estudianteModelPost.fechaDeInscripcion = new Date()),
+            (this.estudianteModelPost.dateOfBirth = new Date()),
+            (this.estudianteModelPost.carrera = ''),
+            (this.estudianteModelPost.generoPoesia = ''),
             (this.estudianteModelPost.fechaDelamacion = new Date());
           Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Solicitud Agregado Correctamente',
+            title: 'Solicitud Agregada Correctamente',
             showConfirmButton: false,
             timer: 1500,
+          });
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer);
+              toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Solicitud enviada',
           });
         },
         (error) => {
           console.log(<any>error);
-          Swal.fire({
+          const Toast = Swal.mixin({
+            toast: true,
             position: 'top-end',
-            icon: 'error',
-            title: error.error.mensaje,
             showConfirmButton: false,
-            timer: 1500,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer);
+              toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: 'warning',
+            title: error.error.mensaje,
           });
         }
       );

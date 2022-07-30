@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormularioComponent } from './components/formulario/formulario.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ReporteComponent } from './components/reporte/reporte.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormularioComponent,
-    NavbarComponent
+    NavbarComponent,
+    ReporteComponent
   ],
   imports: [
     BrowserModule,
